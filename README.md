@@ -5,7 +5,7 @@
 3. Network Sniffer
 4. Exploit Development
 5. Wireless Network Auditor
-6. !(File Integrity Checker)[fileIntegrityChecker/fileIntegrityChecker.py]
+6. File Integrity Checker ### *END*
 7. DNS Enumeration Tool
 8. Social Engineering Toolkit
 9. Vulnerability Exploitation Framework
