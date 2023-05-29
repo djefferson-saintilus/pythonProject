@@ -4,7 +4,7 @@
 2. Password Cracker
 3. Network Sniffer
 4. Exploit Development
-5. Network Auditor ## 90%
+5. Network Auditor ## END
 6. File Integrity Checker ### *END*
 7. DNS Enumeration Tool
 8. Social Engineering Toolkit
