@@ -187,7 +187,7 @@ def main():
 """)
 
     print("Author: Djefferson Saintilus")
-    print("Version: v1.0")
+    print("version: v1.0")
     print("--------------------------------")
     while True:
         print("\nMenu:")
