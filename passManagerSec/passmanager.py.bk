@@ -1,0 +1,200 @@
+import pykeepass
+import getpass
+import hashlib
+import requests
+from cryptography.fernet import Fernet
+import base64
+import os
+import pyperclip
+
+DB_FILE = ""
+MASTER_PASSWORD = ""
+
+def encrypt_password(password):
+    key = hashlib.sha256(MASTER_PASSWORD.encode()).digest()
+    fernet_key = base64.urlsafe_b64encode(key)
+    fernet = Fernet(fernet_key)
+    encrypted_password = fernet.encrypt(password.encode())
+    return encrypted_password
+
+def decrypt_password(encrypted_password):
+    key = hashlib.sha256(MASTER_PASSWORD.encode()).digest()
+    fernet_key = base64.urlsafe_b64encode(key)
+    fernet = Fernet(fernet_key)
+    decrypted_password = fernet.decrypt(encrypted_password).decode()
+    return decrypted_password
+
+def create_database():
+    global DB_FILE
+    database_name = input("Enter the name for the database (without extension): ")
+    DB_FILE = f"{database_name}.kdbx"
+    master_password = getpass.getpass("Enter the master password: ")
+    confirm_password = getpass.getpass("Confirm the master password: ")
+
+    if master_password == confirm_password:
+        try:
+            # Create an empty KeePass database file
+            kp = pykeepass.create_database(DB_FILE, master_password)
+            kp.save()
+            print(f"Database '{database_name}.kdbx' created successfully!")
+        except Exception as e:
+            print("Error creating database:", str(e))
+            return
+    else:
+        print("Passwords do not match. Database creation aborted.")
+
+
+def store_password():
+    global DB_FILE
+    global MASTER_PASSWORD
+
+    if DB_FILE is None or MASTER_PASSWORD is None:
+        print("No existing database found. Please create a new database first.")
+        return
+
+    entry_name = input("Enter the entry name: ")
+    website_url = input("Enter the website URL: ")
+    username = input("Enter the username: ")
+    password = getpass.getpass("Enter the password: ")
+
+    try:
+        with pykeepass.PyKeePass(DB_FILE, password=MASTER_PASSWORD) as kp:
+            entry_group = kp.find_groups(name='Root', first=True)
+            entry = kp.add_entry(entry_group, title=entry_name, username=username, password=password)
+            entry.url = website_url  # Set the URL field
+            kp.save()
+        print("Password stored successfully!")
+    except Exception as e:
+        print("Error storing password:", str(e))
+
+def retrieve_password():
+    global DB_FILE
+    global MASTER_PASSWORD
+
+    if DB_FILE is None or MASTER_PASSWORD is None:
+        print("No existing database found. Please create a new database first.")
+        return
+
+    entry_name = input("Enter the entry name: ")
+    username = input("Enter username: ")
+
+    try:
+        with pykeepass.PyKeePass(DB_FILE, password=MASTER_PASSWORD) as kp:
+            entries = kp.find_entries(title=entry_name, username=username)
+            if entries:
+                entry = entries[0]
+                decrypted_password = entry.password  # Password is already stored in encrypted form
+                print("Retrieved password:", decrypted_password)
+                pyperclip.copy(decrypted_password)
+                print("Password copied to clipboard.")
+            else:
+                print("No matching entry found.")
+    except Exception as e:
+        print("Error retrieving password:", str(e))
+
+
+def analyze_password():
+    password = getpass.getpass("Enter password to analyze: ")
+
+    # Generate SHA-1 hash of the password
+    sha1_password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
+    sha1_prefix = sha1_password[:5]
+    sha1_suffix = sha1_password[5:]
+
+    try:
+        response = requests.get(f"https://api.pwnedpasswords.com/range/{sha1_prefix}")
+        if response.status_code == 200:
+            password_hashes = response.text.splitlines()
+            found = False
+
+            # Check if the password hash suffix exists in the response
+            for password_hash in password_hashes:
+                if sha1_suffix in password_hash:
+                    count = int(password_hash.split(':')[1])
+                    print(f"The password '{password}' has been found in {count} data breaches.")
+                    found = True
+                    break
+
+            if not found:
+                print(f"The password '{password}' has not been found in any data breaches.")
+        elif response.status_code == 404:
+            print(f"The password '{password}' has not been found in any data breaches.")
+        else:
+            print("An error occurred while analyzing the password.")
+    except Exception as e:
+        print("Error analyzing password:", str(e))
+
+def show_entries():
+    try:
+        with pykeepass.PyKeePass(DB_FILE, password=MASTER_PASSWORD) as kp:
+            entries = kp.entries
+            print("Database Entries:")
+            for entry in entries:
+                print("Title:", entry.title)
+                print("Username:", entry.username)
+                print("==============")
+    except Exception as e:
+        print("Error retrieving entries:", str(e))
+
+def main():
+    global MASTER_PASSWORD
+
+    print("=== Password Manager Security Analyzer ===")
+    print("Author: Your Name")
+    print("------------------------------------------")
+
+    while True:
+        print("\nMenu:")
+        print("1. Create KeePass database")
+        print("2. Store password")
+        print("3. Retrieve password")
+        print("4. Analyze password")
+        print("5. Show database entries")
+        print("0. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            try:
+                create_database()
+                MASTER_PASSWORD = getpass.getpass("Enter the master password: ")
+            except Exception as e:
+                print("Error creating database:", str(e))
+        elif choice == '2':
+            if not os.path.exists(DB_FILE):
+                print("Please create a new KeePass database first.")
+            else:
+                try:
+                    store_password()
+                except Exception as e:
+                    print("Error storing password:", str(e))
+        elif choice == '3':
+            if not os.path.exists(DB_FILE):
+                print("Please create a new KeePass database first.")
+            else:
+                try:
+                    retrieve_password()
+                except Exception as e:
+                    print("Error retrieving password:", str(e))
+        elif choice == '4':
+            try:
+                analyze_password()
+            except Exception as e:
+                print("An error occurred while analyzing the password:", str(e))
+
+        elif choice == '5':
+            if not os.path.exists(DB_FILE):
+                print("Please create a new KeePass database first.")
+            else:
+                try:
+                    show_entries()
+                except Exception as e:
+                    print("Error retrieving entries:", str(e))
+        elif choice == '0':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == '__main__':
+    main()
