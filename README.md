@@ -4,12 +4,12 @@
 2. Password Cracker
 3. Network Sniffer
 4. Exploit Development
-5. Network Auditor ## END
+5. Network Auditor ## *END*
 6. File Integrity Checker ### *END*
 7. DNS Enumeration Tool
 8. Social Engineering Toolkit
 9. Vulnerability Exploitation Framework
-10. Password Manager Security Analyzer
+10. Password Manager Security Analyzer ## *END*
 11. Network Traffic Analyzer
 12. Firewall Bypass Tool
 13. Web Proxy Server
