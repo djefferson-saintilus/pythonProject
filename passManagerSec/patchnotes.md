@@ -3,3 +3,4 @@ v1.0
 - encrypted password when enter in db and show entries options
 don't show password field, ever gonna show it, show the encrypted
 version for password
+- API google authentificator
