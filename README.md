@@ -37,21 +37,23 @@
 35. Webshell Detection Tool
 36. Password Policy Evaluator
 37. SSH Key Auditor
-38. VPN (Virtual Private Network) Analyzer
-39. Wireless Rogue AP Detector
-40. Binary Analysis Tool
-41. Vulnerable Web Application Suite
-42. VoIP Traffic Analyzer
-43. Malware Analysis Tool
-44. Web Application Firewall (WAF) Bypass Tool
-45. Malicious PDF Generator
-46. Network Protocol Analyzer
-47. SNMP Brute Forcer
-48. Wireless Channel Analyzer
-49. WiFi Evil Twin Attack Tool
-50. USB Hacking Tool
-51. YouVulnerable XSS (Cross-Site Scripting) Tester ## *END* 
-52. webcam public
-53. file analyzer
-54. gtosearch ## *END*
-55. all-in-one ## *END*
+38. SSH bruteforcer
+39. VPN (Virtual Private Network) Analyzer
+40. Wireless Rogue AP Detector
+41. Binary Analysis Tool
+42. Vulnerable Web Application Suite
+43. VoIP Traffic Analyzer
+44. Malware Analysis Tool
+45. Web Application Firewall (WAF) Bypass Tool
+46. Malicious PDF Generator
+47. Network Protocol Analyzer
+48. SNMP Brute Forcer
+49. Wireless Channel Analyzer
+50. WiFi Evil Twin Attack Tool
+51. USB Hacking Tool
+52. YouVulnerable XSS (Cross-Site Scripting) Tester ## *END* 
+53. webcam public
+54. file analyzer
+55. gtosearch ## *END*
+56. all-in-one ## *END*
+57. Vulnerability Trends 
