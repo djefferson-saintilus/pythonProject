@@ -16,7 +16,7 @@
 14. Remote Access Trojan (RAT)
 15. Payload Generator
 16. SQL Injection Tester
-17. XSS (Cross-Site Scripting) Tester
+17. 
 18. Clickjacking Tester
 19. Fuzzing Tool
 20. Man-in-the-Middle (MITM) Attack Tool
@@ -50,7 +50,7 @@
 48. Wireless Channel Analyzer
 49. WiFi Evil Twin Attack Tool
 50. USB Hacking Tool
-51. YouVulnerable ## *END* 
+51. YouVulnerable XSS (Cross-Site Scripting) Tester ## *END* 
 52. webcam public
 53. file analyzer
 54. gtosearch ## *END*
